@@ -11,14 +11,16 @@ def validate_name(name):
         raise ValidationError("Name must contain only alphabetic letters.")
 
     return name
-def validate_email(email):
-    user = User.objects.filter(email = email).exists()
-    if user :
+
+def validate_email(email, instance=None):
+    qs = User.objects.filter(email=email)
+    if instance:
+        qs = qs.exclude(pk=instance.pk) 
+
+    if qs.exists():
         raise ValidationError("Email already exists")
 
     return email
-
-
 def validate_age(age):
     if age < 7 or age > 99:
         raise ValidationError("Age must be between 7 and 99.")
