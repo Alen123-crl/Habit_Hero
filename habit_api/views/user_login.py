@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from ..serializers.user_login import LoginSerializer
+from ..serializers.user_login import LoginSerializer,RefreshTokenSerializer
 
 User = get_user_model()
 
@@ -30,6 +30,19 @@ class LoginView(APIView):
                 "age": profile.age,
                 "profile_pic": profile_pic_url,
             },
+            "tokens": {
+                "access": data["access"],
+                "refresh": data["refresh"],
+            }
+        }, status=status.HTTP_200_OK)
+class RefreshTokenView(APIView):
+
+    def post(self, request):
+        serializer = RefreshTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        return Response({
             "tokens": {
                 "access": data["access"],
                 "refresh": data["refresh"],

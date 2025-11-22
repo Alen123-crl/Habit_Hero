@@ -16,10 +16,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         validators=[validate_name]
     )
     age = serializers.IntegerField(required=False, validators=[validate_age])
-    pro_pic = serializers.URLField(
+    pro_pic = serializers.ImageField(
         required=False,
         allow_null=True,
-        validators=[validate_image_url]
     )
 
     class Meta:
@@ -45,7 +44,8 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             profile.first_name = validated_data.get('first_name', profile.first_name)
             profile.last_name = validated_data.get('last_name', profile.last_name)
             profile.age = validated_data.get('age', profile.age)
-            profile.pro_pic = validated_data.get('pro_pic', profile.pro_pic)
+            if 'pro_pic' in validated_data:
+                profile.pro_pic = validated_data['pro_pic']
             profile.save()
 
         return instance

@@ -22,7 +22,7 @@ class UserView(APIView):
     def patch(self, request):
         """Partial update"""
         user = request.user
-        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
+        serializer = UserUpdateSerializer(user, data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "User updated successfully"}, status=status.HTTP_200_OK)
